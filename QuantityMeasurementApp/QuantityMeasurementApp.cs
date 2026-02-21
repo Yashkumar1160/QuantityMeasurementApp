@@ -13,7 +13,7 @@ namespace QuantityMeasurementApp
             Console.WriteLine("Enter First Value (In Feet): ");
             double firstValue=double.Parse(Console.ReadLine());            
 
-            //take first value
+            //take second value
             Console.WriteLine("Enter Second Value (In Feet): ");
             double secondValue=double.Parse(Console.ReadLine());
 
