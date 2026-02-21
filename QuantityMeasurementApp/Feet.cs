@@ -38,5 +38,11 @@ namespace QuantityMeasurementApp
             //Compare Values 
             return value.CompareTo(feet.value)==0;
         }
+
+	//Override GetHashCode method
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
     }
 }
