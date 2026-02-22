@@ -263,7 +263,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Conversion Feet To Inches
         [TestMethod]
-        public void testConversion_FeetToInches()
+        public void TestConversion_FeetToInches()
         {
             double result = QuantityLength.Convert(1.0, LengthUnit.Feet, LengthUnit.Inch);
             Assert.AreEqual(12.0, result, epsilon);
@@ -271,14 +271,14 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Conversion Inches To Feet
         [TestMethod]
-        public void testConversion_InchesToFeet()
+        public void TestConversion_InchesToFeet()
         {
             double result = QuantityLength.Convert(24.0, LengthUnit.Inch, LengthUnit.Feet);
             Assert.AreEqual(2.0, result, epsilon);
         }
         //Test Conversion Yards To Inches
         [TestMethod]
-        public void testConversion_YardsToInches()
+        public void TestConversion_YardsToInches()
         {
             double result = QuantityLength.Convert(1.0, LengthUnit.Yard, LengthUnit.Inch);
             Assert.AreEqual(36.0, result, epsilon);
@@ -286,7 +286,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Conversion Inches To Yards
         [TestMethod]
-        public void testConversion_InchesToYards()
+        public void TestConversion_InchesToYards()
         {
             double result = QuantityLength.Convert(72.0, LengthUnit.Inch, LengthUnit.Yard);
             Assert.AreEqual(2.0, result, epsilon);
@@ -294,7 +294,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Conversion Centimeters To Inches
         [TestMethod]
-        public void testConversion_CentimetersToInches()
+        public void TestConversion_CentimetersToInches()
         {
             double result = QuantityLength.Convert(2.54, LengthUnit.Centimeter, LengthUnit.Inch);
             Assert.AreEqual(1.0, result, epsilon);
@@ -302,7 +302,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Conversion Feet To Yard
         [TestMethod]
-        public void testConversion_FeetToYard()
+        public void TestConversion_FeetToYard()
         {
             double result = QuantityLength.Convert(6.0, LengthUnit.Feet, LengthUnit.Yard);
             Assert.AreEqual(2.0, result, epsilon);
@@ -310,7 +310,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Round Trip Conversion
         [TestMethod]
-        public void testConversion_RoundTrip_PreservesValue()
+        public void TestConversion_RoundTrip_PreservesValue()
         {
             double original = 5.5;
 
@@ -322,7 +322,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Zero Value Conversion
         [TestMethod]
-        public void testConversion_ZeroValue()
+        public void TestConversion_ZeroValue()
         {
             double result = QuantityLength.Convert(0.0, LengthUnit.Feet, LengthUnit.Inch);
             Assert.AreEqual(0.0, result, epsilon);
@@ -330,7 +330,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Negative Value Conversion
         [TestMethod]
-        public void testConversion_NegativeValue()
+        public void TestConversion_NegativeValue()
         {
             double result = QuantityLength.Convert(-1.0, LengthUnit.Feet, LengthUnit.Inch);
             Assert.AreEqual(-12.0, result, epsilon);
@@ -338,7 +338,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Invalid Unit Throws Exception
         [TestMethod]
-        public void testConversion_InvalidUnit_Throws()
+        public void TestConversion_InvalidUnit_Throws()
         {
             Assert.Throws<ArgumentException>(() =>
                 QuantityLength.Convert(5.0, (LengthUnit)100, LengthUnit.Feet));
@@ -346,7 +346,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test NaN Or Infinite Value Throws Exception
         [TestMethod]
-        public void testConversion_NaNOrInfinite_Throws()
+        public void TestConversion_NaNOrInfinite_Throws()
         {
             Assert.Throws<ArgumentException>(() =>
                 QuantityLength.Convert(double.NaN, LengthUnit.Feet, LengthUnit.Inch));
@@ -360,7 +360,7 @@ namespace QuantityMeasurementApp.Tests
 
         //Test Precision Tolerance
         [TestMethod]
-        public void testConversion_PrecisionTolerance()
+        public void TestConversion_PrecisionTolerance()
         {
             double result = QuantityLength.Convert(1.0, LengthUnit.Centimeter, LengthUnit.Inch);
             double expected = 0.393700787;
