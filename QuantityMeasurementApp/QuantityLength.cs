@@ -122,17 +122,17 @@ namespace QuantityMeasurementApp
         }
 
         //Method to Add Two Length Units
-        public QuantityLength Add(QuantityLength other)
+        public QuantityLength Add(QuantityLength second)
         {
             //Check null
-            if (other == null)
+            if (second == null)
             {
                 throw new ArgumentException("Second operand cannot be null");
             }
 
             //Convert both to base unit (Feet)
             double firstInFeet = this.ConvertToBaseUnit();
-            double secondInFeet = other.ConvertToBaseUnit();
+            double secondInFeet = second.ConvertToBaseUnit();
 
             //Add values in base unit
             double sumInFeet = firstInFeet + secondInFeet;
