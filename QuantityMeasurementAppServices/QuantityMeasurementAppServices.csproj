@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuantityMeasurementAppBusiness\QuantityMeasurementAppBusiness.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementAppModels\QuantityMeasurementAppModels.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementAppRepositories\QuantityMeasurementAppRepositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- JwtService needs this to create/read JWT tokens -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+
+    <!-- AuthService needs BCrypt to hash and verify passwords -->
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+
+</Project>
