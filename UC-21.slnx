@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="AdminService/AdminService.csproj" />
+  <Project Path="ApiGateway/ApiGateway.csproj" />
+  <Project Path="AuthService/AuthService.csproj" />
+  <Project Path="HistoryService/HistoryService.csproj" />
+  <Project Path="QuantityMeasurementAppBusiness/QuantityMeasurementAppBusiness.csproj" />
+  <Project Path="QuantityMeasurementAppModels/QuantityMeasurementAppModels.csproj" />
+  <Project Path="QuantityMeasurementAppRepositories/QuantityMeasurementAppRepositories.csproj" />
+  <Project Path="QuantityMeasurementAppServices/QuantityMeasurementAppServices.csproj" />
+  <Project Path="QuantityService/QuantityService.csproj" />
+</Solution>

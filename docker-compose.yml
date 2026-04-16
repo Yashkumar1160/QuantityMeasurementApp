@@ -1,0 +1,116 @@
+services:
+  # ── DATABASE ────────────────────────────────────────────────────────────────
+  db-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: qma-db-server
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Password2026!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Password2026!' -Q 'SELECT 1' -C"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── BACKEND SERVICES ────────────────────────────────────────────────────────
+  auth-service:
+    build:
+      context: .
+      dockerfile: AuthService/Dockerfile
+    container_name: qma-auth-service
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db-server;Database=AuthServiceDB;User Id=sa;Password=YourStrong@Password2026!;Encrypt=False;
+      - Jwt__SecretKey=btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - Jwt__Issuer=QuantityMeasurementAPI
+      - Jwt__Audience=QuantityMeasurementClient
+    depends_on:
+      db-server:
+        condition: service_healthy
+    ports:
+      - "5001:8080" # Map host port 5001 to container port 8080 (ASP.NET default)
+
+  quantity-service:
+    build:
+      context: .
+      dockerfile: QuantityService/Dockerfile
+    container_name: qma-quantity-service
+    environment:
+      - Services__History=http://history-service:8080
+    depends_on:
+      history-service:
+        condition: service_started
+    ports:
+      - "5002:8080"
+
+  history-service:
+    build:
+      context: .
+      dockerfile: HistoryService/Dockerfile
+    container_name: qma-history-service
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db-server;Database=HistoryServiceDB;User Id=sa;Password=YourStrong@Password2026!;Encrypt=False;
+      - Jwt__SecretKey=btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - Jwt__Issuer=QuantityMeasurementAPI
+      - Jwt__Audience=QuantityMeasurementClient
+    depends_on:
+      db-server:
+        condition: service_healthy
+    ports:
+      - "5003:8080"
+
+  admin-service:
+    build:
+      context: .
+      dockerfile: AdminService/Dockerfile
+    container_name: qma-admin-service
+    environment:
+      - Services__Auth=http://auth-service:8080
+      - Services__History=http://history-service:8080
+      - Jwt__SecretKey=btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - Jwt__Issuer=QuantityMeasurementAPI
+      - Jwt__Audience=QuantityMeasurementClient
+    depends_on:
+      auth-service:
+        condition: service_started
+      history-service:
+        condition: service_started
+    ports:
+      - "5004:8080"
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    container_name: qma-api-gateway
+    environment:
+      - Services__Auth=http://auth-service:8080
+      - Services__Quantity=http://quantity-service:8080
+      - Services__History=http://history-service:8080
+      - Services__Admin=http://admin-service:8080
+    depends_on:
+      auth-service:
+        condition: service_started
+      quantity-service:
+        condition: service_started
+    ports:
+      - "5000:8080"
+
+  # ── FRONTEND ────────────────────────────────────────────────────────────────
+  angular-app:
+    build:
+      context: ../quantity-measurement-app
+      dockerfile: Dockerfile
+    container_name: qma-angular-app
+    ports:
+      - "4200:80"
+    depends_on:
+      api-gateway:
+        condition: service_started
+
+volumes:
+  sql-data:

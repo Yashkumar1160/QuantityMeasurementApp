@@ -1,0 +1,14 @@
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/out
+**/dist
+.git
+.dockerignore
+docker-compose.yml
+docker-compose.override.yml
+*.user
+*.suo
+*.db
+*.log

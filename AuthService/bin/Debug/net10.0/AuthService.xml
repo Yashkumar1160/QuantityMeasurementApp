@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AuthService</name>
+    </assembly>
+    <members>
+        <member name="M:AuthService.Controllers.AuthController.Register(QuantityMeasurementAppModels.DTOs.RegisterRequest)">
+             <summary>
+             Register a new account with email and password
+             </summary>
+             <remarks>
+             Example request:
+            
+                 POST /api/v1/auth/register
+                 {
+                     "name": "Yash Kumar",
+                     "email": "yash@gmail.com",
+                     "password": "mypassword123"
+                 }
+            
+             Returns a JWT token. Use it in the Authorization header for all other endpoints:
+                 Authorization: Bearer {token}
+             </remarks>
+        </member>
+        <member name="M:AuthService.Controllers.AuthController.Login(QuantityMeasurementAppModels.DTOs.LoginRequest)">
+             <summary>
+             Login with your email and password
+             </summary>
+             <remarks>
+             Example request:
+            
+                 POST /api/v1/auth/login
+                 {
+                     "email": "yash@gmail.com",
+                     "password": "mypassword123"
+                 }
+            
+             Returns a JWT token. Use it in the Authorization header for all other endpoints:
+                 Authorization: Bearer {token}
+             </remarks>
+        </member>
+        <member name="M:AuthService.Controllers.AuthController.Ping">
+            <summary>
+            Test that auth controller is running
+            </summary>
+        </member>
+        <member name="T:AuthService.Migrations.InitialAuthCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:AuthService.Migrations.InitialAuthCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AuthService.Migrations.InitialAuthCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AuthService.Migrations.InitialAuthCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+    </members>
+</doc>
