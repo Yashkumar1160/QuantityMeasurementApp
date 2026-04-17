@@ -7,7 +7,6 @@ using QuantityMeasurementAppServices.Services;
 using QuantityService.Middleware;
 using System.IdentityModel.Tokens.Jwt;
 using QuantityMeasurementAppServices.Middleware;
-using Scalar.AspNetCore;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -93,8 +92,9 @@ builder.Services.AddControllers(options =>
     };
 });
 
-// ── OpenAPI & Scalar ───────────────────────────────────────────────────────
+// ── OpenAPI & Swagger ─────────────────────────────────────────────────────
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
@@ -103,7 +103,8 @@ var app = builder.Build();
 app.UseMiddleware<CorrelationIdMiddleware>(); // Track requests across services
 
 app.MapOpenApi();
-app.MapScalarApiReference(); // Modern documentation UI
+app.UseSwagger();
+app.UseSwaggerUI(); // Modern documentation UI
 
 app.UseCors("AllowAngular");
 app.UseAuthentication();

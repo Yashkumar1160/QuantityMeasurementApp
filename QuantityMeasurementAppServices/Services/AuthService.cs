@@ -3,6 +3,8 @@ using QuantityMeasurementAppModels.DTOs;
 using QuantityMeasurementAppModels.Entities;
 using QuantityMeasurementAppRepositories.Interfaces;
 using QuantityMeasurementAppServices.Interfaces;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace QuantityMeasurementAppServices.Services
 {
@@ -17,7 +19,7 @@ namespace QuantityMeasurementAppServices.Services
             this.jwtService     = jwtService;
         }
 
-        public async System.Threading.Tasks.Task<AuthResponse> RegisterAsync(RegisterRequest request)
+        public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
         {
             UserEntity existing = await userRepository.FindByEmailAsync(request.Email);
             if (existing != null)
@@ -41,7 +43,7 @@ namespace QuantityMeasurementAppServices.Services
             return BuildResponse(newUser, token);
         }
 
-        public async System.Threading.Tasks.Task<AuthResponse> LoginAsync(LoginRequest request)
+        public async Task<AuthResponse> LoginAsync(LoginRequest request)
         {
             UserEntity user = await userRepository.FindByEmailAsync(request.Email);
             if (user == null)
@@ -58,7 +60,7 @@ namespace QuantityMeasurementAppServices.Services
             return BuildResponse(user, token);
         }
 
-        public async System.Threading.Tasks.Task<System.Collections.Generic.List<UserResponse>> GetAllUsersAsync()
+        public async Task<System.Collections.Generic.List<UserResponse>> GetAllUsersAsync()
         {
             var users = await userRepository.GetAllAsync();
             var result = new System.Collections.Generic.List<UserResponse>();
@@ -76,7 +78,7 @@ namespace QuantityMeasurementAppServices.Services
             return result;
         }
 
-        public async System.Threading.Tasks.Task PromoteToAdminAsync(long userId)
+        public async Task PromoteToAdminAsync(long userId)
         {
             var user = await userRepository.FindByIdAsync(userId);
             if (user == null)

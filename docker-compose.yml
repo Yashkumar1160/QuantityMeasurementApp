@@ -1,21 +1,21 @@
 services:
   # ── DATABASE ────────────────────────────────────────────────────────────────
   db-server:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:alpine
     container_name: qma-db-server
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=YourStrong@Password2026!
-      - MSSQL_PID=Developer
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=YourStrong@Password2026!
+      - POSTGRES_DB=qmadb
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sql-data:/var/opt/mssql
+      - pg-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Password2026!' -Q 'SELECT 1' -C"]
+      test: ["CMD-SHELL", "pg_isready -U sa -d qmadb"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
 
   # ── BACKEND SERVICES ────────────────────────────────────────────────────────
   auth-service:
@@ -24,7 +24,7 @@ services:
       dockerfile: AuthService/Dockerfile
     container_name: qma-auth-service
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db-server;Database=AuthServiceDB;User Id=sa;Password=YourStrong@Password2026!;Encrypt=False;
+      - ConnectionStrings__DefaultConnection=Host=db-server;Database=qmadb;Username=sa;Password=YourStrong@Password2026!;
       - Jwt__SecretKey=btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
       - Jwt__Issuer=QuantityMeasurementAPI
       - Jwt__Audience=QuantityMeasurementClient
@@ -53,7 +53,7 @@ services:
       dockerfile: HistoryService/Dockerfile
     container_name: qma-history-service
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db-server;Database=HistoryServiceDB;User Id=sa;Password=YourStrong@Password2026!;Encrypt=False;
+      - ConnectionStrings__DefaultConnection=Host=db-server;Database=qmadb;Username=sa;Password=YourStrong@Password2026!;
       - Jwt__SecretKey=btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
       - Jwt__Issuer=QuantityMeasurementAPI
       - Jwt__Audience=QuantityMeasurementClient
@@ -113,4 +113,4 @@ services:
         condition: service_started
 
 volumes:
-  sql-data:
+  pg-data:

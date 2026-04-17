@@ -13,7 +13,7 @@ namespace QuantityMeasurementAppServices.Interfaces
         List<QuantityMeasurementResponseDTO> GetHistoryByOperation(string operation, long userId);
         List<QuantityMeasurementResponseDTO> GetHistoryByType(string measurementType, long userId);
         List<QuantityMeasurementResponseDTO> GetErrorHistory(long userId);
-        List<QuantityMeasurementResponseDTO> GetAllHistory(long userId);     // NEW
+        List<QuantityMeasurementResponseDTO> GetAllHistory(long userId);    
         int GetOperationCount(string operation, long userId);
     }
 }

@@ -45,7 +45,7 @@ namespace QuantityMeasurementAppRepositories.Context
                 entity.Property(e => e.Name).HasColumnName("name").IsRequired().HasMaxLength(255);
                 entity.Property(e => e.PasswordHash).HasColumnName("password_hash").IsRequired().HasMaxLength(100);
 
-                // NEW: map the role column
+                // map the role column
                 entity.Property(e => e.Role).HasColumnName("role").IsRequired().HasMaxLength(20).HasDefaultValue("User");
 
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at");

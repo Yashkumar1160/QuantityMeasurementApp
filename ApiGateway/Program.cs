@@ -1,5 +1,4 @@
 using System.Net.Http.Headers;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +16,9 @@ builder.Services.AddHttpClient("quantity-service", c => c.BaseAddress = new Uri(
 builder.Services.AddHttpClient("history-service",  c => c.BaseAddress = new Uri(historyServiceUrl));
 builder.Services.AddHttpClient("admin-service",    c => c.BaseAddress = new Uri(adminServiceUrl));
 
-// ── OpenAPI & Docs ─────────────────────────────────────────────────────────
+// ── OpenAPI & Swagger ─────────────────────────────────────────────────────
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 // ── CORS ───────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
@@ -31,9 +31,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ── Scalar Documentation UI ────────────────────────────────────────────────
+// ── Swagger Documentation UI ────────────────────────────────────────────────
 app.MapOpenApi();
-app.MapScalarApiReference();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("AllowAngular");
 

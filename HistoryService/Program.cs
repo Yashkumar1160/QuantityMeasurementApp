@@ -7,7 +7,6 @@ using QuantityMeasurementAppRepositories.Interfaces;
 using QuantityMeasurementAppRepositories.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using QuantityMeasurementAppServices.Middleware;
-using Scalar.AspNetCore;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -22,7 +21,7 @@ builder.Services.AddCors(options =>
 
 // ── Database ──────────────────────────────────────────────────────────────
 builder.Services.AddDbContext<HistoryDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
     
 builder.Services.AddScoped<IQuantityRecordRepository>(sp => new QuantityRecordRepository(sp.GetRequiredService<HistoryDbContext>()));
 builder.Services.AddHttpContextAccessor();
@@ -72,8 +71,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ── OpenAPI & Scalar ───────────────────────────────────────────────────────
+// ── OpenAPI & Swagger ─────────────────────────────────────────────────────
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
@@ -90,7 +90,8 @@ using (var scope = app.Services.CreateScope())
 app.UseMiddleware<CorrelationIdMiddleware>(); // Track requests across services
 
 app.MapOpenApi();
-app.MapScalarApiReference(); // Modern documentation UI
+app.UseSwagger();
+app.UseSwaggerUI(); // Modern documentation UI
 
 app.UseCors("AllowAngular");
 app.UseAuthentication();

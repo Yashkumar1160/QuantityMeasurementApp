@@ -1,5 +1,5 @@
 # Use the official .NET SDK image to build the app
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /src
 
 # Copy project files and restore dependencies first for better caching
@@ -21,7 +21,7 @@ FROM build AS publish
 RUN dotnet publish "AuthService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Final stage: run the app
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
 WORKDIR /app
 
 # Install globalization libraries (required for SQL Server on Alpine)

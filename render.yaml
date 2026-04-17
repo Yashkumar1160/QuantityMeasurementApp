@@ -1,24 +1,4 @@
 services:
-  # ── DATABASE ────────────────────────────────────────────────────────────────
-  - type: worker
-    name: qma-db-server
-    runtime: docker
-    dockerContext: .
-    dockerfilePath: db.Dockerfile # We'll create this to wrap MSSQL
-    region: ohio
-    plan: starter # Required for disks
-    envVars:
-      - key: ACCEPT_EULA
-        value: Y
-      - key: MSSQL_SA_PASSWORD
-        value: YourStrong@Password2026!
-      - key: MSSQL_PID
-        value: Developer
-    disk:
-      name: mssql-data
-      mountPath: /var/opt/mssql
-      sizeGB: 1
-
   # ── BACKEND SERVICES ────────────────────────────────────────────────────────
   - type: web
     name: qma-auth-service
@@ -26,10 +6,12 @@ services:
     dockerContext: .
     dockerfilePath: AuthService/Dockerfile
     region: ohio
-    plan: starter
+    plan: free
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        value: Server=qma-db-server;Database=AuthServiceDB;User Id=sa;Password=YourStrong@Password2026!;Encrypt=False;
+        fromDatabase:
+          name: qma-db
+          property: connectionString
       - key: Jwt__SecretKey
         value: btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
       - key: Jwt__Issuer
@@ -43,7 +25,7 @@ services:
     dockerContext: .
     dockerfilePath: QuantityService/Dockerfile
     region: ohio
-    plan: starter
+    plan: free
     envVars:
       - key: Services__History
         value: http://qma-history-service:8080
@@ -54,10 +36,12 @@ services:
     dockerContext: .
     dockerfilePath: HistoryService/Dockerfile
     region: ohio
-    plan: starter
+    plan: free
     envVars:
       - key: ConnectionStrings__DefaultConnection
-        value: Server=qma-db-server;Database=HistoryServiceDB;User Id=sa;Password=YourStrong@Password2026!;Encrypt=False;
+        fromDatabase:
+          name: qma-db
+          property: connectionString
       - key: Jwt__SecretKey
         value: btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
 
@@ -67,7 +51,7 @@ services:
     dockerContext: .
     dockerfilePath: AdminService/Dockerfile
     region: ohio
-    plan: starter
+    plan: free
     envVars:
       - key: Services__Auth
         value: http://qma-auth-service:8080
@@ -80,7 +64,7 @@ services:
     dockerContext: .
     dockerfilePath: ApiGateway/Dockerfile
     region: ohio
-    plan: starter
+    plan: free
     envVars:
       - key: Services__Auth
         value: http://qma-auth-service:8080
@@ -91,11 +75,10 @@ services:
       - key: Services__Admin
         value: http://qma-admin-service:8080
 
-  # ── FRONTEND ────────────────────────────────────────────────────────────────
-  - type: web
-    name: qma-angular-app
-    runtime: docker
-    dockerContext: ../quantity-measurement-app
-    dockerfilePath: Dockerfile
+# ── DATABASE ──────────────────────────────────────────────────────────────────
+databases:
+  - name: qma-db
+    databaseName: qmadb
+    user: qmauser
     region: ohio
-    plan: starter
+    plan: free

@@ -27,12 +27,5 @@ namespace AuthService.Context
             });
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=AuthServiceDB;Trusted_Connection=True;TrustServerCertificate=True;");
-            }
-        }
     }
 }

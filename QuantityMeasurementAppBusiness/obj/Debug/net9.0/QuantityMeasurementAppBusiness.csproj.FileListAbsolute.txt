@@ -1,0 +1,16 @@
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\bin\Debug\net9.0\QuantityMeasurementAppBusiness.deps.json
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\bin\Debug\net9.0\QuantityMeasurementAppBusiness.dll
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\bin\Debug\net9.0\QuantityMeasurementAppBusiness.pdb
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\bin\Debug\net9.0\QuantityMeasurementAppModels.dll
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\bin\Debug\net9.0\QuantityMeasurementAppModels.pdb
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.csproj.AssemblyReference.cache
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.AssemblyInfoInputs.cache
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.AssemblyInfo.cs
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.csproj.CoreCompileInputs.cache
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.sourcelink.json
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\Quantity.36EEC7CD.Up2Date
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.dll
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\refint\QuantityMeasurementAppBusiness.dll
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\QuantityMeasurementAppBusiness.pdb
+C:\Users\yk444\Videos\BTECH\QuantityMeasurementApp\New folder\UC-21\QuantityMeasurementAppBusiness\obj\Debug\net9.0\ref\QuantityMeasurementAppBusiness.dll
