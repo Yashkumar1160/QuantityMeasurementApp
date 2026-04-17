@@ -49,6 +49,8 @@ static async Task ForwardAsync(HttpContext ctx, IHttpClientFactory factory, stri
     // Create the message to send to the downstream service
     var request = new HttpRequestMessage(method, path + ctx.Request.QueryString);
 
+    Console.WriteLine($"[Gateway] Forwarding {ctx.Request.Method} {ctx.Request.Path} to {client.BaseAddress}{path}");
+
     // Forward the Authorization header (JWT) if it exists
     if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
     {
