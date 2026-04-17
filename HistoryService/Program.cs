@@ -103,8 +103,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<HistoryDbContext>();
-    // This creates the database and tables if they don't exist
+    // First, ensure the database itself exists
     db.Database.EnsureCreated();
+    
+    // SECOND: Explicitly force creation of the 'quantity_measurements' table if it was missed
+    var databaseCreator = (Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator)db.Database.GetService<Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade>().GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
+    if (databaseCreator is Microsoft.EntityFrameworkCore.Storage.IRelationalDatabaseCreator relationalCreator)
+    {
+        try { relationalCreator.CreateTables(); } catch { /* Table already exists */ }
+    }
 }
 
 // ── Middleware Pipeline ────────────────────────────────────────────────────
