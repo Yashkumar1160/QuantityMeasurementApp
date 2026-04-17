@@ -9,6 +9,7 @@ namespace QuantityService.Controllers
 {
     // Copied from UC-18 QuantityMeasurementController
     // Only changes: namespace + removed the 5 history/count GET endpoints (moved to HistoryService)
+    [Authorize]
     [ApiController]
     [Route("api/v1/quantities")]
     public class QuantityMeasurementController : ControllerBase
