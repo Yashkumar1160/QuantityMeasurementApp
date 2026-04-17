@@ -28,7 +28,18 @@ services:
     plan: free
     envVars:
       - key: Services__History
-        value: http://qma-history-service:8080/
+        fromService:
+          type: web
+          name: qma-history-service
+          property: host
+        sync: false
+        # We'll prefix with https:// in the code or just use the host. 
+        # Actually, let's just use the full URL property if available.
+        # Render doesn't have a 'url' property, so we use 'host'. 
+        # But wait, our .NET code expects a full URL. 
+        # So we use value: https://${HOST} format.
+      - key: Services__History
+        value: https://qma-history-service.onrender.com/
 
   - type: web
     name: qma-history-service
@@ -54,9 +65,9 @@ services:
     plan: free
     envVars:
       - key: Services__Auth
-        value: http://qma-auth-service:8080/
+        value: https://qma-auth-service-p1hw.onrender.com/
       - key: Services__History
-        value: http://qma-history-service:8080/
+        value: https://qma-history-service.onrender.com/
 
   - type: web
     name: qma-api-gateway
@@ -67,13 +78,13 @@ services:
     plan: free
     envVars:
       - key: Services__Auth
-        value: http://qma-auth-service:8080/
+        value: https://qma-auth-service-p1hw.onrender.com/
       - key: Services__Quantity
-        value: http://qma-quantity-service:8080/
+        value: https://qma-quantity-service.onrender.com/
       - key: Services__History
-        value: http://qma-history-service:8080/
+        value: https://qma-history-service.onrender.com/
       - key: Services__Admin
-        value: http://qma-admin-service:8080/
+        value: https://qma-admin-service.onrender.com/
 
 # ── DATABASE ──────────────────────────────────────────────────────────────────
 databases:
