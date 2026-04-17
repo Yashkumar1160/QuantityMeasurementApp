@@ -53,39 +53,42 @@ namespace QuantityMeasurementAppServices.Services
             {
                 try
                 {
-                    var request = new HttpRequestMessage(HttpMethod.Post, "api/v1/internal/history");
-                    request.Content = JsonContent.Create(entity);
-
-                    // 1. ADD SECURITY: Prove this is an internal call from another service
-                    request.Headers.Add("X-Internal-Secret", InternalSecret);
-
-                    // 2. ADD TRACING: Use the captured unique request ID
-                    if (!string.IsNullOrEmpty(correlationId))
-                    {
-                        request.Headers.Add("X-Correlation-ID", correlationId);
-                    }
-
                     // 3. SEND (with a simple retry if it fails)
                     int retryCount = 0;
                     while (retryCount < 3)
                     {
+                        // Create a NEW request message for each attempt (Mandatory in .NET)
+                        var request = new HttpRequestMessage(HttpMethod.Post, "api/v1/internal/history");
+                        request.Content = JsonContent.Create(entity);
+                        request.Headers.Add("X-Internal-Secret", InternalSecret);
+                        if (!string.IsNullOrEmpty(correlationId))
+                        {
+                            request.Headers.Add("X-Correlation-ID", correlationId);
+                        }
+
                         var response = await historyClient.SendAsync(request);
                         if (response.IsSuccessStatusCode)
                         {
-                            Console.WriteLine($"[QuantityService] SUCCESS: Saved record to HistoryService (Attempt {retryCount+1})");
+                            Console.WriteLine($"[QuantityService] SUCCESS: Saved record to HistoryService (Attempt {retryCount + 1})");
                             break;
                         }
-                        
+
                         retryCount++;
                         var reason = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"[QuantityService] WARNING: History save failed (Attempt {retryCount}). Status: {response.StatusCode}. Reason: {reason}");
+                        
+                        if (retryCount >= 3)
+                        {
+                             logger.LogError($"Failed to save record to HistoryService after {retryCount} attempts. Status: {response.StatusCode}");
+                        }
+                        
                         await Task.Delay(500); // Wait a bit before retrying
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"[QuantityService] ERROR: Fatal failure calling HistoryService: {ex.Message}");
-                    logger.LogError(ex, "Failed to save record to HistoryService after multiple attempts.");
+                    logger.LogError(ex, "Failed to save record to HistoryService due to exception.");
                 }
             });
         }
