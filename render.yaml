@@ -7,6 +7,7 @@ services:
     dockerfilePath: AuthService/Dockerfile
     region: ohio
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -26,9 +27,16 @@ services:
     dockerfilePath: QuantityService/Dockerfile
     region: ohio
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: Services__History
         value: https://qma-history-service.onrender.com/
+      - key: Jwt__SecretKey
+        value: btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - key: Jwt__Issuer
+        value: QuantityMeasurementAPI
+      - key: Jwt__Audience
+        value: QuantityMeasurementClient
 
   - type: web
     name: qma-history-service
@@ -37,6 +45,7 @@ services:
     dockerfilePath: HistoryService/Dockerfile
     region: ohio
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: ConnectionStrings__DefaultConnection
         fromDatabase:
@@ -44,6 +53,10 @@ services:
           property: connectionString
       - key: Jwt__SecretKey
         value: btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - key: Jwt__Issuer
+        value: QuantityMeasurementAPI
+      - key: Jwt__Audience
+        value: QuantityMeasurementClient
 
   - type: web
     name: qma-admin-service
@@ -52,11 +65,18 @@ services:
     dockerfilePath: AdminService/Dockerfile
     region: ohio
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: Services__Auth
         value: https://qma-auth-service-p1hw.onrender.com/
       - key: Services__History
         value: https://qma-history-service.onrender.com/
+      - key: Jwt__SecretKey
+        value: btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - key: Jwt__Issuer
+        value: QuantityMeasurementAPI
+      - key: Jwt__Audience
+        value: QuantityMeasurementClient
 
   - type: web
     name: qma-api-gateway
@@ -65,6 +85,7 @@ services:
     dockerfilePath: ApiGateway/Dockerfile
     region: ohio
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: Services__Auth
         value: https://qma-auth-service-p1hw.onrender.com/
@@ -74,6 +95,12 @@ services:
         value: https://qma-history-service.onrender.com/
       - key: Services__Admin
         value: https://qma-admin-service.onrender.com/
+      - key: Jwt__SecretKey
+        value: btOUxwrOAwpVRLmc*#RfL8sdI#vYAZlgRuvO%qpRzxFHKq1V!
+      - key: Jwt__Issuer
+        value: QuantityMeasurementAPI
+      - key: Jwt__Audience
+        value: QuantityMeasurementClient
 
 # ── DATABASE ──────────────────────────────────────────────────────────────────
 databases:
