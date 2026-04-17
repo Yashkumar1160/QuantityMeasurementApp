@@ -36,7 +36,13 @@ namespace QuantityMeasurementAppServices.Services
         private void SaveToHistoryAsync(QuantityMeasurementEntity entity)
         {
             // GUEST CHECK: Do not save history for unauthenticated users (UserId = 0)
-            if (entity.UserId <= 0) return;
+            if (entity.UserId <= 0)
+            {
+                Console.WriteLine($"[QuantityService] Skipping history save: User is identified as GUEST (ID: {entity.UserId})");
+                return;
+            }
+
+            Console.WriteLine($"[QuantityService] Attempting to save record for User {entity.UserId} to HistoryService...");
 
             // Capture correlation ID BEFORE the request thread finishes and HttpContext is disposed
             var correlationId = httpContextAccessor.HttpContext?.Items["X-Correlation-ID"]?.ToString();
@@ -64,15 +70,21 @@ namespace QuantityMeasurementAppServices.Services
                     while (retryCount < 3)
                     {
                         var response = await historyClient.SendAsync(request);
-                        if (response.IsSuccessStatusCode) break;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            Console.WriteLine($"[QuantityService] SUCCESS: Saved record to HistoryService (Attempt {retryCount+1})");
+                            break;
+                        }
                         
                         retryCount++;
-                        logger.LogWarning($"Attempt {retryCount} to save history failed. Retrying...");
+                        var reason = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[QuantityService] WARNING: History save failed (Attempt {retryCount}). Status: {response.StatusCode}. Reason: {reason}");
                         await Task.Delay(500); // Wait a bit before retrying
                     }
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine($"[QuantityService] ERROR: Fatal failure calling HistoryService: {ex.Message}");
                     logger.LogError(ex, "Failed to save record to HistoryService after multiple attempts.");
                 }
             });
