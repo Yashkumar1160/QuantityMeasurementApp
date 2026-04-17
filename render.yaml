@@ -28,17 +28,6 @@ services:
     plan: free
     envVars:
       - key: Services__History
-        fromService:
-          type: web
-          name: qma-history-service
-          property: host
-        sync: false
-        # We'll prefix with https:// in the code or just use the host. 
-        # Actually, let's just use the full URL property if available.
-        # Render doesn't have a 'url' property, so we use 'host'. 
-        # But wait, our .NET code expects a full URL. 
-        # So we use value: https://${HOST} format.
-      - key: Services__History
         value: https://qma-history-service.onrender.com/
 
   - type: web
