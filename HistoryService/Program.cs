@@ -108,7 +108,7 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
     
     // SECOND: Explicitly force creation of even if db exists (EnsureCreated skips if DB exists)
-    var databaseCreator = db.Database.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
+    var databaseCreator = Microsoft.EntityFrameworkCore.Infrastructure.AccessorExtensions.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>(db.Database);
     if (databaseCreator is Microsoft.EntityFrameworkCore.Storage.IRelationalDatabaseCreator relationalCreator)
     {
         try { relationalCreator.CreateTables(); } catch { /* Table already exists */ }
