@@ -4,17 +4,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ── Service URLs ───────────────────────────────────────────────────────────
 // In Docker, these will be set via Environment Variables:
-var authServiceUrl     = builder.Configuration["Services:Auth"]     ?? "http://localhost:5001";
-var quantityServiceUrl = builder.Configuration["Services:Quantity"] ?? "http://localhost:5002";
-var historyServiceUrl  = builder.Configuration["Services:History"]  ?? "http://localhost:5003";
-var adminServiceUrl    = builder.Configuration["Services:Admin"]    ?? "http://localhost:5004";
+var authServiceUrl     = builder.Configuration["Services:Auth"]     ?? "https://qma-auth-service-p1hw.onrender.com/";
+var quantityServiceUrl = builder.Configuration["Services:Quantity"] ?? "https://qma-quantity-service.onrender.com/";
+var historyServiceUrl  = builder.Configuration["Services:History"]  ?? "https://qma-history-service.onrender.com/";
+var adminServiceUrl    = builder.Configuration["Services:Admin"]    ?? "https://qma-admin-service.onrender.com/";
 
 // ── HTTP clients ───────────────────────────────────────────────────────────
 // Using IHttpClientFactory is the proper way to handle outbound HTTP calls.
-builder.Services.AddHttpClient("auth-service",     c => c.BaseAddress = new Uri(authServiceUrl));
-builder.Services.AddHttpClient("quantity-service", c => c.BaseAddress = new Uri(quantityServiceUrl));
-builder.Services.AddHttpClient("history-service",  c => c.BaseAddress = new Uri(historyServiceUrl));
-builder.Services.AddHttpClient("admin-service",    c => c.BaseAddress = new Uri(adminServiceUrl));
+builder.Services.AddHttpClient("auth-service",     c => { c.BaseAddress = new Uri(authServiceUrl);     Console.WriteLine($"[Gateway] Auth Client -> {authServiceUrl}"); });
+builder.Services.AddHttpClient("quantity-service", c => { c.BaseAddress = new Uri(quantityServiceUrl); Console.WriteLine($"[Gateway] Quantity Client -> {quantityServiceUrl}"); });
+builder.Services.AddHttpClient("history-service",  c => { c.BaseAddress = new Uri(historyServiceUrl);  Console.WriteLine($"[Gateway] History Client -> {historyServiceUrl}"); });
+builder.Services.AddHttpClient("admin-service",    c => { c.BaseAddress = new Uri(adminServiceUrl);    Console.WriteLine($"[Gateway] Admin Client -> {adminServiceUrl}"); });
 
 // ── OpenAPI & Swagger ─────────────────────────────────────────────────────
 builder.Services.AddOpenApi();
