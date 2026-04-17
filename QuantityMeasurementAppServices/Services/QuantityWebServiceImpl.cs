@@ -38,8 +38,11 @@ namespace QuantityMeasurementAppServices.Services
             // GUEST CHECK: Do not save history for unauthenticated users (UserId = 0)
             if (entity.UserId <= 0) return;
 
+            // Capture correlation ID BEFORE the request thread finishes and HttpContext is disposed
+            var correlationId = httpContextAccessor.HttpContext?.Items["X-Correlation-ID"]?.ToString();
+
             // We do this in a "fire and forget" task to keep the UI fast, 
-            // but we add tracing and security headers first.
+            // but we use the already-captured correlation ID.
             Task.Run(async () =>
             {
                 try
@@ -50,8 +53,7 @@ namespace QuantityMeasurementAppServices.Services
                     // 1. ADD SECURITY: Prove this is an internal call from another service
                     request.Headers.Add("X-Internal-Secret", InternalSecret);
 
-                    // 2. ADD TRACING: Pass the unique request ID (Correlation ID)
-                    var correlationId = httpContextAccessor.HttpContext?.Items["X-Correlation-ID"]?.ToString();
+                    // 2. ADD TRACING: Use the captured unique request ID
                     if (!string.IsNullOrEmpty(correlationId))
                     {
                         request.Headers.Add("X-Correlation-ID", correlationId);
