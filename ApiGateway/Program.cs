@@ -34,7 +34,19 @@ var app = builder.Build();
 // ── Swagger Documentation UI ────────────────────────────────────────────────
 app.MapOpenApi();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    // Local Gateway API (Shows the raw Gateway routes)
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "System Overview (Gateway)");
+
+    // Aggregated Microservice APIs
+    options.SwaggerEndpoint("/swagger-docs/auth",     "Auth Service API");
+    options.SwaggerEndpoint("/swagger-docs/quantity", "Quantity Service API");
+    options.SwaggerEndpoint("/swagger-docs/history",  "History Service API");
+    options.SwaggerEndpoint("/swagger-docs/admin",    "Admin Service API");
+
+    options.DocumentTitle = "QMA - Unified Microservices API";
+});
 
 app.UseCors("AllowAngular");
 
@@ -129,6 +141,12 @@ app.MapGroup("/api/v1/history").Map("{*any}", (HttpContext ctx, IHttpClientFacto
 // Admin Service Routes
 app.MapGroup("/api/v1/admin").Map("{*any}", (HttpContext ctx, IHttpClientFactory f) => 
     ForwardAsync(ctx, f, "admin-service", ctx.Request.Path)).WithTags("Admin");
+
+// ── Swagger Proxy Routes (Relays documentation from internal services) ──────
+app.MapGet("/swagger-docs/auth",     (HttpContext ctx, IHttpClientFactory f) => ForwardAsync(ctx, f, "auth-service",     "/swagger/v1/swagger.json"));
+app.MapGet("/swagger-docs/quantity", (HttpContext ctx, IHttpClientFactory f) => ForwardAsync(ctx, f, "quantity-service", "/swagger/v1/swagger.json"));
+app.MapGet("/swagger-docs/history",  (HttpContext ctx, IHttpClientFactory f) => ForwardAsync(ctx, f, "history-service",  "/swagger/v1/swagger.json"));
+app.MapGet("/swagger-docs/admin",    (HttpContext ctx, IHttpClientFactory f) => ForwardAsync(ctx, f, "admin-service",    "/swagger/v1/swagger.json"));
 
 // ── Health Check ───────────────────────────────────────────────────────────
 app.MapGet("/health", () => Results.Ok(new { status = "Gateway Healthy", time = DateTime.UtcNow }));
