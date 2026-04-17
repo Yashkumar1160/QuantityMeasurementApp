@@ -116,12 +116,28 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-// ── Database Initialization (Auto-Create for Docker) ──────────────────────
+// ── Database Initialization (Auto-Create & Seed for Docker) ───────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     // This creates the database and tables if they don't exist
     db.Database.EnsureCreated();
+
+    // Auto-seed a default Admin user if none exists
+    if (!db.Users.Any(u => u.Role == "Admin"))
+    {
+        var admin = new QuantityMeasurementAppModels.Entities.UserEntity
+        {
+            Name = "System Admin",
+            Email = "admin@quantities.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+            Role = "Admin",
+            CreatedAt = DateTime.UtcNow,
+            LastLoginAt = DateTime.UtcNow
+        };
+        db.Users.Add(admin);
+        db.SaveChanges();
+    }
 }
 
 // ── Middleware Pipeline ────────────────────────────────────────────────────
