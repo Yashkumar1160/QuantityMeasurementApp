@@ -21,11 +21,21 @@ builder.Services.AddCors(options =>
 
 // ── Database ──────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("postgres://"))
+if (!string.IsNullOrEmpty(connectionString))
 {
-    var uri = new Uri(connectionString);
-    var userInfo = uri.UserInfo.Split(':');
-    connectionString = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={uri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Prefer;Trust Server Certificate=true;";
+    connectionString = connectionString.Trim('"', ' ');
+    if (connectionString.StartsWith("postgres://") || connectionString.StartsWith("postgresql://"))
+    {
+        var uri = new Uri(connectionString);
+        var userInfo = uri.UserInfo.Split(':');
+        var host = uri.Host;
+        var port = uri.Port > 0 ? uri.Port : 5432;
+        var db = uri.LocalPath.TrimStart('/');
+        var user = Uri.UnescapeDataString(userInfo[0]);
+        var pass = Uri.UnescapeDataString(userInfo.Length > 1 ? userInfo[1] : "");
+
+        connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={pass};Ssl Mode=Require;Trust Server Certificate=true;";
+    }
 }
 
 builder.Services.AddDbContext<HistoryDbContext>(options =>
