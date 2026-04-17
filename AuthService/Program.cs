@@ -8,6 +8,9 @@ using QuantityMeasurementAppRepositories.Repositories;
 using QuantityMeasurementAppServices.Interfaces;
 using QuantityMeasurementAppServices.Services;
 using AuthService.Middleware;
+using QuantityMeasurementAppServices.Middleware;
+using System.IdentityModel.Tokens.Jwt;
+
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 // Fix for PostgreSQL DateTime compatibility
