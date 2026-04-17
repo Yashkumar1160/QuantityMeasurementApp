@@ -10,6 +10,9 @@ using QuantityMeasurementAppServices.Middleware;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+// Fix for PostgreSQL DateTime compatibility
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ── CORS ───────────────────────────────────────────────────────────────────

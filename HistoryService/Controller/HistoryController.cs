@@ -34,8 +34,19 @@ namespace HistoryService.Controllers
             if (!Request.Headers.TryGetValue("X-Internal-Secret", out var secret) || secret != InternalSecret)
                 return Unauthorized(new { Message = "Internal access only. Secret key required." });
 
-            await repository.SaveAsync(entity);
-            return Ok();
+            try 
+            {
+                await repository.SaveAsync(entity);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[HistoryService Error] Failed to save record: {ex.Message}");
+                if (ex.InnerException != null) 
+                    Console.WriteLine($"[HistoryService Inner Error] {ex.InnerException.Message}");
+                
+                return StatusCode(500, new { Error = "Database Error", Details = ex.Message });
+            }
         }
 
         // Called by AdminService to get ALL records from all users
