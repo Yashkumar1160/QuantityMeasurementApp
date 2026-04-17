@@ -28,10 +28,7 @@ services:
     plan: free
     envVars:
       - key: Services__History
-        fromService:
-          type: web
-          name: qma-history-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-history-service:8080/
 
   - type: web
     name: qma-history-service
@@ -57,15 +54,9 @@ services:
     plan: free
     envVars:
       - key: Services__Auth
-        fromService:
-          type: web
-          name: qma-auth-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-auth-service:8080/
       - key: Services__History
-        fromService:
-          type: web
-          name: qma-history-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-history-service:8080/
 
   - type: web
     name: qma-api-gateway
@@ -76,25 +67,13 @@ services:
     plan: free
     envVars:
       - key: Services__Auth
-        fromService:
-          type: web
-          name: qma-auth-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-auth-service:8080/
       - key: Services__Quantity
-        fromService:
-          type: web
-          name: qma-quantity-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-quantity-service:8080/
       - key: Services__History
-        fromService:
-          type: web
-          name: qma-history-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-history-service:8080/
       - key: Services__Admin
-        fromService:
-          type: web
-          name: qma-admin-service
-          envVarKey: RENDER_EXTERNAL_URL
+        value: http://qma-admin-service:8080/
 
 # ── DATABASE ──────────────────────────────────────────────────────────────────
 databases:
