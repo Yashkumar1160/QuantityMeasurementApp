@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using AuthService.Context;
 using QuantityMeasurementAppRepositories.Interfaces;
@@ -129,8 +130,8 @@ using (var scope = app.Services.CreateScope())
     // First, ensure the database itself exists
     db.Database.EnsureCreated();
     
-    // SECOND: Explicitly force creation of the 'users' table if it was missed
-    var databaseCreator = (Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator)db.Database.GetService<Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade>().GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
+    // SECOND: Explicitly force creation of even if db exists (EnsureCreated skips if DB exists)
+    var databaseCreator = db.Database.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>();
     if (databaseCreator is Microsoft.EntityFrameworkCore.Storage.IRelationalDatabaseCreator relationalCreator)
     {
         try { relationalCreator.CreateTables(); } catch { /* Table already exists */ }
