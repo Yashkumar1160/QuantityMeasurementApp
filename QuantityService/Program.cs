@@ -27,8 +27,14 @@ builder.Services.AddHttpContextAccessor();
 // HttpClient to call HistoryService (interservice communication)
 builder.Services.AddHttpClient("HistoryService", client =>
 {
-    var url = builder.Configuration["Services:History"] ?? "http://localhost:5003/";
+    var url = builder.Configuration["Services:History"] ?? "https://qma-history-service.onrender.com/";
+    
+    // Ensure URL is clean for production
+    if (!url.StartsWith("http")) url = "https://" + url;
+    if (!url.EndsWith("/")) url += "/";
+
     client.BaseAddress = new Uri(url);
+    Console.WriteLine($"[QuantityService Config] History Client initialized with BaseAddress: {url}");
 });
 
 // ── Authentication ────────────────────────────────────────────────────────
